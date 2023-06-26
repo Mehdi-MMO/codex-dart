@@ -7,6 +7,8 @@ local dartTimer = 0
 
 local DARTBlip = nil
 
+local keybindEnabled = true
+
 Citizen.CreateThread(function()
     while true do
         Citizen.Wait(0)
@@ -68,22 +70,32 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterCommand('firedart', function()
-    if targetVehicle ~= nil then
-        if dartTimer == 0 then
-            lockedVehicle = targetVehicle
-            dartTimer = Config.DartTimer -- Timer in minutes
-            TriggerEvent("chat:addMessage", {
-                color = { 255, 0, 0 },
-                multiline = true,
-                args = { "D.A.R.T System", "Dart fired and attached to the target vehicle." }
-            })
-        else
-            TriggerEvent("chat:addMessage", {
-                color = { 255, 0, 0 },
-                multiline = true,
-                args = { "D.A.R.T System", "Dart already fired and attached. Timer: " .. dartTimer .. " minutes." }
-            })
+RegisterKeyMapping('firedart', 'Fire D.A.R.T', 'keyboard', 'G')
+
+Citizen.CreateThread(function()
+    while true do
+        Citizen.Wait(0)
+        
+        if keybindEnabled then
+            if IsDisabledControlJustReleased(0, 47) then
+                if targetVehicle ~= nil then
+                    if dartTimer == 0 then
+                        lockedVehicle = targetVehicle
+                        dartTimer = Config.DartTimer -- Timer in minutes
+                        TriggerEvent("chat:addMessage", {
+                            color = { 255, 0, 0 },
+                            multiline = true,
+                            args = { "D.A.R.T System", "Dart fired and attached to the target vehicle." }
+                        })
+                    else
+                        TriggerEvent("chat:addMessage", {
+                            color = { 255, 0, 0 },
+                            multiline = true,
+                            args = { "D.A.R.T System", "Dart already fired and attached. Timer: " .. dartTimer .. " minutes." }
+                        })
+                    end
+                end
+            end
         end
     end
 end)
@@ -92,12 +104,14 @@ RegisterCommand('trackdart', function()
     dartSetup = not dartSetup
     
     if dartSetup then
+        keybindEnabled = false
         TriggerEvent("chat:addMessage", {
             color = { 255, 0, 0 },
             multiline = true,
             args = { "D.A.R.T System", "D.A.R.T system activated. Scanning for vehicles in range." }
         })
     else
+        keybindEnabled = true
         TriggerEvent("chat:addMessage", {
             color = { 255, 0, 0 },
             multiline = true,
@@ -116,6 +130,7 @@ RegisterCommand('stopdart', function()
         RemoveBlip(DARTBlip)
         DARTBlip = nil
     end
+    keybindEnabled = true
     TriggerEvent("chat:addMessage", {
         color = { 255, 0, 0 },
         multiline = true,
