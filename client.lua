@@ -1,5 +1,5 @@
 local dartSetup = false
-local dartRange = 50.0
+local dartRange = 100.0
 local inRange = false
 local targetVehicle = nil
 local lockedVehicle = nil
