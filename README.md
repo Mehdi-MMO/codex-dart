@@ -31,9 +31,9 @@ Here's a roadmap of the planned features and improvements for D.A.R.T:
 
 - [x] Implement a command to toggle tracking on/off
 
-- [ ] Add particle effect to indicate marked vehicles
+- [x] Implement sound effects for tracking events
 
-- [ ] Implement sound effects for tracking events
+- [ ] Add particle effect to indicate marked vehicles
 
 - [ ] Create a job bridge for integration with job systems (e.g., ESX, vRP)
 
