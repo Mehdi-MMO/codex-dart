@@ -15,6 +15,8 @@ D.A.R.T is a resource for FiveM that provides driver assistance and vehicle trac
 
 - Customizable blip settings
 
+- Configurable DartCooldown, DartTimer, UseCommand, CommandName, Keybind
+
 ## Roadmap
 
 Here's a roadmap of the planned features and improvements for D.A.R.T:
@@ -31,9 +33,9 @@ Here's a roadmap of the planned features and improvements for D.A.R.T:
 
 - [ ] Create a job bridge for integration with job systems (e.g., ESX, vRP)
 
-- [ ] Add additional configurable options for more customization
+- [x] Add additional configurable options for more customization
 
-- [ ] Implement a command to toggle tracking on/off
+- [x] Implement a command to toggle tracking on/off
 
 - [ ] Add support for marking multiple vehicles simultaneously
 
