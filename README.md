@@ -63,6 +63,12 @@ You can customize the behavior of D.A.R.T by modifying the options in the `confi
 
 - `BlipDisplay`: The display mode of the blip on the map for marked vehicles.
 
+- `UseCommand`: Set to true to use the command, false to use the keybind
+
+- `CommandName`: Command name to fire the dart
+
+- `Keybind`: Keybind to fire the dart
+
 ## Usage
 
 To start tracking a nearby vehicle, enter an emergency vehicle and use the `/firedart` command. The nearest vehicle will be marked with a blip on the map, indicating its location. The blip will be visible to all players on the server. There is a cooldown period between each tracking attempt to prevent spamming.
