@@ -81,6 +81,9 @@ if Config.UseCommand then
                     multiline = true,
                     args = { "D.A.R.T System", "Dart fired and attached to the target vehicle." }
                 })
+                
+                -- Play front-end sound when dart is fired
+                PlaySoundFrontend(-1, "CONFIRM_BEEP", "HUD_MINI_GAME_SOUNDSET", 1)
             else
                 TriggerEvent("chat:addMessage", {
                     color = { 255, 0, 0 },
@@ -108,6 +111,9 @@ else
                                 multiline = true,
                                 args = { "D.A.R.T System", "Dart fired and attached to the target vehicle." }
                             })
+                            
+                            -- Play front-end sound when dart is fired
+                            PlaySoundFrontend(-1, "CONFIRM_BEEP", "HUD_MINI_GAME_SOUNDSET", 1)
                         else
                             TriggerEvent("chat:addMessage", {
                                 color = { 255, 0, 0 },
@@ -183,11 +189,14 @@ RegisterCommand('removedart', function()
 end)
 
 function GetVehicleInFrontOfEntity(entity)
-    local coords = GetOffsetFromEntityInWorldCoords(entity, 0.0, 1.0, 0.3)
-    local coords2 = GetOffsetFromEntityInWorldCoords(entity, 0.0, dartRange, 0.0)
-    local rayhandle = CastRayPointToPoint(coords, coords2, 10, entity, 0)
+    local coords = GetEntityCoords(entity)
+    local forwardVector = GetEntityForwardVector(entity)
+    local rayStart = coords + forwardVector * 1.0
+    local rayEnd = coords + forwardVector * dartRange
+
+    local rayhandle = CastRayPointToPoint(rayStart.x, rayStart.y, rayStart.z, rayEnd.x, rayEnd.y, rayEnd.z, 10, entity, 0)
     local _, _, _, _, entityHit = GetRaycastResult(rayhandle)
-    
+
     if entityHit > 0 and IsEntityAVehicle(entityHit) then
         return entityHit
     else
