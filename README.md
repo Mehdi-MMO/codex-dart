@@ -27,15 +27,15 @@ Here's a roadmap of the planned features and improvements for D.A.R.T:
 
 - [x] Customize blip settings
 
+- [x] Add additional configurable options for more customization
+
+- [x] Implement a command to toggle tracking on/off
+
 - [ ] Add particle effect to indicate marked vehicles
 
 - [ ] Implement sound effects for tracking events
 
 - [ ] Create a job bridge for integration with job systems (e.g., ESX, vRP)
-
-- [x] Add additional configurable options for more customization
-
-- [x] Implement a command to toggle tracking on/off
 
 - [ ] Add support for marking multiple vehicles simultaneously
 
