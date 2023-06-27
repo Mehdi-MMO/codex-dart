@@ -77,3 +77,8 @@ To start tracking a nearby vehicle, enter an emergency vehicle and use the `/fir
 
 D.A.R.T is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
 
+## Credits
+
+- Developed by [TheStoicBear](https://github.com/TheStoicBear)
+- Developed by [Zenith](https://github.com/joshllan26)
+
