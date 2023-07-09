@@ -1,3 +1,5 @@
+local Core = exports["ND_Core"]:GetCoreObject()
+
 local dartSetup = false
 local dartRange = 100.0
 local inRange = false
@@ -7,7 +9,9 @@ local dartTimer = 0
 
 local DARTBlip = nil
 
-local keybindEnabled = true
+local keybindEnabled = Config.UseKeybind
+
+local blipSettings = Config.Blip
 
 Citizen.CreateThread(function()
     while true do
@@ -52,17 +56,18 @@ Citizen.CreateThread(function()
             end
             
             DARTBlip = AddBlipForEntity(lockedVehicle)
-            SetBlipSprite(DARTBlip, 794)
+            SetBlipSprite(DARTBlip, blipSettings.Sprite)
             SetBlipDisplay(DARTBlip, 4)
             SetBlipNameToPlayerName(DARTBlip, lockedVehicle)
             
-            if dartTimer >= 3 then
-                SetBlipColour(DARTBlip, Config.BlipColors.Blue)
-            elseif dartTimer == 2 then
-                SetBlipColour(DARTBlip, Config.BlipColors.Orange)
+            if dartTimer >= Config.DartTimer * 0.2 then
+                SetBlipColour(DARTBlip, blipSettings.Color.LongDuration)
+            elseif dartTimer >= Config.DartTimer * 0.1 then
+                SetBlipColour(DARTBlip, blipSettings.Color.MediumDuration)
             else
-                SetBlipColour(DARTBlip, Config.BlipColors.Red)
+                SetBlipColour(DARTBlip, blipSettings.Color.ShortDuration)
             end
+
         elseif DARTBlip ~= nil then
             RemoveBlip(DARTBlip)
             DARTBlip = nil
@@ -70,8 +75,18 @@ Citizen.CreateThread(function()
     end
 end)
 
-if Config.UseCommand then
-    RegisterCommand('firedart', function()
+RegisterCommand(Config.CommandName, function()
+    local characterJob = NDCore.Functions.GetSelectedCharacter().job
+
+    local isPoliceJob = false
+    for _, job in ipairs(Config.PoliceJobs) do
+        if characterJob == job then
+            isPoliceJob = true
+            break
+        end
+    end
+
+    if isPoliceJob then
         if targetVehicle ~= nil then
             if dartTimer == 0 then
                 lockedVehicle = targetVehicle
@@ -80,7 +95,7 @@ if Config.UseCommand then
                     color = { 255, 0, 0 },
                     multiline = true,
                     args = { "D.A.R.T System", "Dart fired and attached to the target vehicle." }
-                })
+                })                
                 
                 -- Play front-end sound when dart is fired
                 PlaySoundFrontend(-1, "CONFIRM_BEEP", "HUD_MINI_GAME_SOUNDSET", 1)
@@ -92,41 +107,18 @@ if Config.UseCommand then
                 })
             end
         end
-    end)
+    else
+        TriggerEvent("chat:addMessage", {
+            color = { 255, 0, 0 },
+            multiline = true,
+            args = { "D.A.R.T System", "Access denied." }
+        })
+    end
+end)
+
+if Config.UseKeybind then
+   RegisterKeyMapping(Config.CommandName, 'Fire D.A.R.T', 'keyboard', Config.Keybind)
 else
-    RegisterKeyMapping('firedart', 'Fire D.A.R.T', 'keyboard', 'G')
-
-    Citizen.CreateThread(function()
-        while true do
-            Citizen.Wait(0)
-
-            if keybindEnabled then
-                if IsDisabledControlJustReleased(0, 47) then
-                    if targetVehicle ~= nil then
-                        if dartTimer == 0 then
-                            lockedVehicle = targetVehicle
-                            dartTimer = Config.DartTimer -- Timer in minutes
-                            TriggerEvent("chat:addMessage", {
-                                color = { 255, 0, 0 },
-                                multiline = true,
-                                args = { "D.A.R.T System", "Dart fired and attached to the target vehicle." }
-                            })
-                            
-                            -- Play front-end sound when dart is fired
-                            PlaySoundFrontend(-1, "CONFIRM_BEEP", "HUD_MINI_GAME_SOUNDSET", 1)
-                        else
-                            TriggerEvent("chat:addMessage", {
-                                color = { 255, 0, 0 },
-                                multiline = true,
-                                args = { "D.A.R.T System", "Dart already fired and attached. Timer: " .. dartTimer .. " minutes." }
-                            })
-                        end
-                    end
-                end
-            end
-        end
-    end)
-end
 
 RegisterCommand('trackdart', function()
     dartSetup = not dartSetup
