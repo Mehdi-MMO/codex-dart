@@ -118,7 +118,7 @@ end)
 
 if Config.UseKeybind then
    RegisterKeyMapping(Config.CommandName, 'Fire D.A.R.T', 'keyboard', Config.Keybind)
-else
+end
 
 RegisterCommand('trackdart', function()
     dartSetup = not dartSetup
